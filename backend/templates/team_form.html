@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}New{% endif %} Team | NexusTournament{% endblock %}
+{% block page_title %}{% if editing %}Edit Team{% else %}New Team{% endif %}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:750px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="name" value="{{ record.name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Tournament Name</label>
+        <input type="text" name="tournament_name" value="{{ record.tournament_name|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Captain</label>
+        <input type="text" name="captain" value="{{ record.captain|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Players</label>
+        <input type="number" name="players" value="{{ record.players|default:'0' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Wins</label>
+        <input type="number" name="wins" value="{{ record.wins|default:'0' }}">
+      </div>
+      <div class="form-group">
+        <label>Losses</label>
+        <input type="number" name="losses" value="{{ record.losses|default:'0' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Draws</label>
+        <input type="number" name="draws" value="{{ record.draws|default:'0' }}">
+      </div>
+      <div class="form-group">
+        <label>Points</label>
+        <input type="number" name="points" value="{{ record.points|default:'0' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="active" {% if record.status == 'active' %}selected{% endif %}>Active</option>
+          <option value="eliminated" {% if record.status == 'eliminated' %}selected{% endif %}>Eliminated</option>
+          <option value="disqualified" {% if record.status == 'disqualified' %}selected{% endif %}>Disqualified</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Create{% endif %} Team</button>
+      <a href="/teams/" class="btn" style="background:var(--border);color:var(--text)">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
