@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}New{% endif %} Tournament | NexusTournament{% endblock %}
+{% block page_title %}{% if editing %}Edit Tournament{% else %}New Tournament{% endif %}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:750px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="name" value="{{ record.name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Sport</label>
+        <select name="sport">
+          <option value="cricket" {% if record.sport == 'cricket' %}selected{% endif %}>Cricket</option>
+          <option value="football" {% if record.sport == 'football' %}selected{% endif %}>Football</option>
+          <option value="basketball" {% if record.sport == 'basketball' %}selected{% endif %}>Basketball</option>
+          <option value="tennis" {% if record.sport == 'tennis' %}selected{% endif %}>Tennis</option>
+          <option value="badminton" {% if record.sport == 'badminton' %}selected{% endif %}>Badminton</option>
+          <option value="chess" {% if record.sport == 'chess' %}selected{% endif %}>Chess</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Format</label>
+        <select name="format">
+          <option value="league" {% if record.format == 'league' %}selected{% endif %}>League</option>
+          <option value="knockout" {% if record.format == 'knockout' %}selected{% endif %}>Knockout</option>
+          <option value="round_robin" {% if record.format == 'round_robin' %}selected{% endif %}>Round Robin</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Teams</label>
+        <input type="number" name="teams" value="{{ record.teams|default:'0' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="registration" {% if record.status == 'registration' %}selected{% endif %}>Registration</option>
+          <option value="ongoing" {% if record.status == 'ongoing' %}selected{% endif %}>Ongoing</option>
+          <option value="completed" {% if record.status == 'completed' %}selected{% endif %}>Completed</option>
+          <option value="cancelled" {% if record.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Start Date</label>
+        <input type="date" name="start_date" value="{{ record.start_date|date:'Y-m-d'|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>End Date</label>
+        <input type="date" name="end_date" value="{{ record.end_date|date:'Y-m-d'|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Prize Pool</label>
+        <input type="number" step="0.01" name="prize_pool" value="{{ record.prize_pool|default:'0' }}">
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Create{% endif %} Tournament</button>
+      <a href="/tournaments/" class="btn" style="background:var(--border);color:var(--text)">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
