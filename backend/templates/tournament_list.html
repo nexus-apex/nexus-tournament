@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Tournaments | NexusTournament{% endblock %}
+{% block page_title %}Tournaments{% endblock %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
+  <form class="search-bar" method="get" style="flex:1;margin-bottom:0">
+    <input type="text" name="search" value="{{ search }}" placeholder="Search tournaments...">
+    <select name="status" onchange="this.form.submit()">
+      <option value="">All Sport</option>
+      <option value="cricket" {% if status_filter == 'cricket' %}selected{% endif %}>Cricket</option>
+      <option value="football" {% if status_filter == 'football' %}selected{% endif %}>Football</option>
+      <option value="basketball" {% if status_filter == 'basketball' %}selected{% endif %}>Basketball</option>
+      <option value="tennis" {% if status_filter == 'tennis' %}selected{% endif %}>Tennis</option>
+      <option value="badminton" {% if status_filter == 'badminton' %}selected{% endif %}>Badminton</option>
+      <option value="chess" {% if status_filter == 'chess' %}selected{% endif %}>Chess</option>
+    </select>
+    <button type="submit" class="btn btn-primary btn-sm">Search</button>
+  </form>
+  <a href="/tournaments/create/" class="btn btn-primary">+ New Tournament</a>
+</div>
+
+<div class="card">
+  {% if records %}
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Sport</th><th>Format</th><th>Teams</th><th>Status</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td><a href="/tournaments/{{ r.pk }}/edit/"><strong>{{ r.name }}</strong></a></td>
+        <td><span class="badge badge-blue">{{ r.get_sport_display }}</span></td>
+        <td><span class="badge badge-blue">{{ r.get_format_display }}</span></td>
+        <td>{{ r.teams|default:"-" }}</td>
+        <td><span class="badge badge-blue">{{ r.get_status_display }}</span></td>
+        <td class="actions">
+          <a href="/tournaments/{{ r.pk }}/edit/" class="btn btn-primary btn-sm">Edit</a>
+          <form method="post" action="/tournaments/{{ r.pk }}/delete/" style="display:inline" onsubmit="return confirm('Delete?')">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Del</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">
+    <p>No tournaments found.</p>
+    <a href="/tournaments/create/" class="btn btn-primary" style="margin-top:1rem">Create Tournament</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
